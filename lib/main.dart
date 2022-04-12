@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
     final Response response =
         await get(Uri.parse('https://yts.mx/api/v2/list_movies.json?quality=3D&page=$_pageNumber'));
     final Map<dynamic, dynamic> result = jsonDecode(response.body) as Map<String, dynamic>;
+    // ignore: avoid_dynamic_calls
     final List<dynamic> movies = result['data']['movies'] as List<dynamic>;
 
     final List<Movie> data = <Movie>[];
