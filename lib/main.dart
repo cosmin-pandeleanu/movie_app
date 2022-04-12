@@ -17,7 +17,6 @@ class MovieApp extends StatelessWidget {
   }
 }
 
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -39,7 +38,8 @@ class _HomePageState extends State<HomePage> {
   Future<void> _getMovies() async {
     setState(() => _isLoading = true);
 
-    final Response response = await get(Uri.parse('https://yts.mx/api/v2/list_movies.json?quality=3D&page=$_pageNumber'));
+    final Response response =
+        await get(Uri.parse('https://yts.mx/api/v2/list_movies.json?quality=3D&page=$_pageNumber'));
     final Map<dynamic, dynamic> result = jsonDecode(response.body) as Map<String, dynamic>;
     final List<dynamic> movies = result['data']['movies'] as List<dynamic>;
 
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Builder(
         builder: (BuildContext context) {
-          if(_isLoading && _movies.isEmpty) {
+          if (_isLoading && _movies.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -98,7 +98,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
 class Movie {
   Movie({
     required this.title,
@@ -109,8 +108,7 @@ class Movie {
   });
 
   Movie.fromJson(Map<String, dynamic> item)
-      :
-        title = item['title'] as String,
+      : title = item['title'] as String,
         year = item['year'] as int,
         rating = (item['rating'] as num).toDouble(),
         genres = List<String>.from(item['genres'] as List<dynamic>),
