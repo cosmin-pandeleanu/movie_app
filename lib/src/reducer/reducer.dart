@@ -27,9 +27,9 @@ AppState _getMovies(AppState state, GetMovies action) {
 
 AppState _getMoviesSuccessful(AppState state, GetMoviesSuccessful action) {
   return state.copyWith(
-      isLoading: false,
-      pageNumber: state.pageNumber + 1,
-      movies: <Movie>[...state.movies, ...action.movies],
+    isLoading: false,
+    pageNumber: state.pageNumber + 1,
+    movies: <Movie>[...state.movies, ...action.movies],
   );
 }
 

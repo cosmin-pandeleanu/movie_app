@@ -15,7 +15,7 @@ class AppEpic {
     ]);
   }
 
-  Stream<dynamic> _getMovies(Stream<GetMovies> actions, EpicStore<AppState> store){
+  Stream<dynamic> _getMovies(Stream<GetMovies> actions, EpicStore<AppState> store) {
     return actions
         .asyncMap((GetMovies action) => _movieApi.getMovies(store.state.pageNumber))
         .map<dynamic>(GetMoviesSuccessful.new)

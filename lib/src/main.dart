@@ -10,17 +10,17 @@ import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 
-void main () {
+void main() {
   final Client _client = Client();
   final MovieApi _movieApi = MovieApi(_client);
   final AppEpic epic = AppEpic(_movieApi);
 
   final Store<AppState> store = Store<AppState>(
-      reducer, 
-      initialState:const AppState(), 
-      middleware: <Middleware<AppState>>[
-        EpicMiddleware<AppState>(epic.getEpics()),
-      ],
+    reducer,
+    initialState: const AppState(),
+    middleware: <Middleware<AppState>>[
+      EpicMiddleware<AppState>(epic.getEpics()),
+    ],
   )..dispatch(GetMovies());
 
   runApp(MovieApp(store: store));

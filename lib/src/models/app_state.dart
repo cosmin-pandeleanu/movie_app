@@ -7,9 +7,9 @@ class AppState {
     this.movies = const <Movie>[],
     this.isLoading = true,
     this.pageNumber = 1,
-    });
+  });
 
-  final List<Movie> movies ;
+  final List<Movie> movies;
   final bool isLoading;
   final int pageNumber;
 

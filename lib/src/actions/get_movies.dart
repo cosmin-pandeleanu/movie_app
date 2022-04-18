@@ -1,6 +1,6 @@
 import 'package:curs_flutter/src/models/movie.dart';
 
-class GetMovies{
+class GetMovies {
   GetMovies();
 
   @override
