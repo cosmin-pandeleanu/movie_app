@@ -13,10 +13,10 @@ dependencies:
     sdk: flutter
   flutter_redux: ^0.9.0
   http: ^0.13.4
+  meta: ^1.7.0
   redux: ^5.0.0
   redux_epics: ^0.15.1
   rxdart: ^0.27.3
-  meta: ^1.7.0
   very_good_analysis: ^2.4.0
 
 
