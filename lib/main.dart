@@ -41,18 +41,18 @@ class _HomePageState extends State<HomePage> {
     final Response response =
         await get(Uri.parse('https://yts.mx/api/v2/list_movies.json?quality=3D&page=$_pageNumber'));
     final Map<dynamic, dynamic> result = jsonDecode(response.body) as Map<String, dynamic>;
-    // ignore: avoid_dynamic_calls
-    final List<dynamic> movies = result['data']['movies'] as List<dynamic>;
 
-    final List<Movie> data = <Movie>[];
+    final Map<String, dynamic> data = result['data'] as Map<String, dynamic>;
+    final List<dynamic> movies = data['movies'] as List<dynamic>;
 
+    final List<Movie> list = <Movie>[];
     for (int i = 0; i < movies.length; i++) {
       final Map<String, dynamic> item = movies[i] as Map<String, dynamic>;
-      data.add(Movie.fromJson(item));
+      list.add(Movie.fromJson(item));
     }
 
     setState(() {
-      _movies.addAll(data);
+      _movies.addAll(list);
       _isLoading = false;
     });
   }
