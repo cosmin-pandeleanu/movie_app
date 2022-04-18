@@ -27,14 +27,13 @@ class HomePage extends StatelessWidget {
           ),
           body: MoviesContainer(
             builder: (BuildContext context, List<Movie> movies) {
-              if (state.isLoading && state.movies.isEmpty) {
+              if (state.isLoading && movies.isEmpty) {
                 return const Center(child: CircularProgressIndicator());
               }
-
               return ListView.builder(
-                itemCount: state.movies.length,
+                itemCount: movies.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final Movie movie = state.movies[index];
+                  final Movie movie = movies[index];
                   return Column(
                     children: <Widget>[
                       Image.network(movie.poster),
