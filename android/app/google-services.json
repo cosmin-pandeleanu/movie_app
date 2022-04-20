@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "604720827418",
+    "project_id": "fluttercourse-4acda",
+    "storage_bucket": "fluttercourse-4acda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604720827418:android:e241f0b83347e392f815a3",
+        "android_client_info": {
+          "package_name": "com.example.curs_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "604720827418-su04d05umvflqftbhfie99uvl5ttme50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBphu9jzhid0XIJdjGTzdIt2lWB9Fp_MUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "604720827418-su04d05umvflqftbhfie99uvl5ttme50.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

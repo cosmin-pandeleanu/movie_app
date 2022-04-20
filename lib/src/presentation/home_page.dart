@@ -1,4 +1,5 @@
 import 'package:curs_flutter/src/actions/get_movies.dart';
+import 'package:curs_flutter/src/actions/index.dart';
 import 'package:curs_flutter/src/containers/home_page_container.dart';
 import 'package:curs_flutter/src/containers/movies_container.dart';
 import 'package:curs_flutter/src/models/app_state.dart';
@@ -6,8 +7,28 @@ import 'package:curs_flutter/src/models/movie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    StoreProvider.of<AppState>(context, listen: false).dispatch(GetMovies(_onResult));
+  }
+
+  void _onResult(AppAction action) {
+    if (action is GetMoviesSuccessful) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Page loaded')));
+    } else if (action is GetMoviesError) {
+      final Object error = action.error;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('An error happened $error')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +36,12 @@ class HomePage extends StatelessWidget {
       builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: AppBar(
-            title: Center(child: Text('Movies ${state.pageNumber}')),
+            title: Center(child: Text('Movies ${state.pageNumber - 1}')),
             actions: <Widget>[
               IconButton(
                 icon: const Icon(Icons.add),
                 onPressed: () {
-                  StoreProvider.of<AppState>(context).dispatch(GetMovies());
+                  StoreProvider.of<AppState>(context).dispatch(GetMovies(_onResult));
                 },
               )
             ],
