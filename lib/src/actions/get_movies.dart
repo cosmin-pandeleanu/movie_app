@@ -1,8 +1,4 @@
-import 'package:curs_flutter/src/actions/index.dart';
-import 'package:curs_flutter/src/models/movie.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'get_movies.freezed.dart';
+part of 'index.dart';
 
 @freezed
 class GetMovies with _$GetMovies implements AppAction {

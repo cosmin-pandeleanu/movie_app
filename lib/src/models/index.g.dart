@@ -1,12 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'movie.dart';
+part of 'index.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$AppUser$ _$$AppUser$FromJson(Map<String, dynamic> json) => _$AppUser$(
+      uid: json['uid'] as String,
+      email: json['email'] as String,
+      username: json['username'] as String,
+      favoriteMovies: (json['favoriteMovies'] as List<dynamic>?)?.map((e) => e as int).toList() ?? const <int>[],
+    );
+
+Map<String, dynamic> _$$AppUser$ToJson(_$AppUser$ instance) => <String, dynamic>{
+      'uid': instance.uid,
+      'email': instance.email,
+      'username': instance.username,
+      'favoriteMovies': instance.favoriteMovies,
+    };
+
 _$Movie$ _$$Movie$FromJson(Map<String, dynamic> json) => _$Movie$(
+      id: json['id'] as int,
       title: json['title'] as String,
       year: json['year'] as int,
       rating: (json['rating'] as num).toDouble(),
@@ -15,6 +30,7 @@ _$Movie$ _$$Movie$FromJson(Map<String, dynamic> json) => _$Movie$(
     );
 
 Map<String, dynamic> _$$Movie$ToJson(_$Movie$ instance) => <String, dynamic>{
+      'id': instance.id,
       'title': instance.title,
       'year': instance.year,
       'rating': instance.rating,

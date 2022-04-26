@@ -1,9 +1,8 @@
-import 'package:curs_flutter/src/actions/get_movies.dart';
 import 'package:curs_flutter/src/actions/index.dart';
 import 'package:curs_flutter/src/containers/home_page_container.dart';
 import 'package:curs_flutter/src/containers/movies_container.dart';
-import 'package:curs_flutter/src/models/app_state.dart';
-import 'package:curs_flutter/src/models/movie.dart';
+import 'package:curs_flutter/src/containers/user_container.dart';
+import 'package:curs_flutter/src/models/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
@@ -51,18 +50,37 @@ class _HomePageState extends State<HomePage> {
               if (state.isLoading && movies.isEmpty) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return ListView.builder(
-                itemCount: movies.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final Movie movie = movies[index];
-                  return Column(
-                    children: <Widget>[
-                      Image.network(movie.poster),
-                      Text(movie.title),
-                      Text('${movie.year}'),
-                      Text(movie.genres.join(', ')),
-                      Text('${movie.rating}')
-                    ],
+              return UserContainer(
+                builder: (BuildContext context, AppUser? user) {
+                  return ListView.builder(
+                    itemCount: movies.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final Movie movie = movies[index];
+
+                      final bool isFavorite = user!.favoriteMovies.contains(movie.id);
+
+                      return Column(
+                        children: <Widget>[
+                          Stack(
+                            children: <Widget>[
+                              Image.network(movie.poster),
+                              IconButton(
+                                color: Colors.red,
+                                icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+                                onPressed: () {
+                                  StoreProvider.of<AppState>(context)
+                                      .dispatch(UpdateFavorite(movie.id, add: !isFavorite));
+                                },
+                              )
+                            ],
+                          ),
+                          Text(movie.title),
+                          Text('${movie.year}'),
+                          Text(movie.genres.join(', ')),
+                          Text('${movie.rating}')
+                        ],
+                      );
+                    },
                   );
                 },
               );

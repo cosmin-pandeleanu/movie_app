@@ -1,8 +1,4 @@
-import 'package:curs_flutter/src/models/app_user.dart';
-import 'package:curs_flutter/src/models/movie.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'app_state.freezed.dart';
+part of 'index.dart';
 
 @freezed
 class AppState with _$AppState {

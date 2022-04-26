@@ -1,5 +1,5 @@
 import 'package:curs_flutter/src/containers/user_container.dart';
-import 'package:curs_flutter/src/models/app_user.dart';
+import 'package:curs_flutter/src/models/index.dart';
 import 'package:curs_flutter/src/presentation/home_page.dart';
 import 'package:curs_flutter/src/presentation/login_page.dart';
 import 'package:flutter/material.dart';
