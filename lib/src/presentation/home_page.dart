@@ -36,6 +36,12 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           appBar: AppBar(
             title: Center(child: Text('Movies ${state.pageNumber - 1}')),
+            leading: IconButton(
+              icon: const Icon(Icons.power_settings_new),
+              onPressed: (){
+                StoreProvider.of<AppState>(context).dispatch(const Logout());
+              },
+            ),
             actions: <Widget>[
               IconButton(
                 icon: const Icon(Icons.add),
