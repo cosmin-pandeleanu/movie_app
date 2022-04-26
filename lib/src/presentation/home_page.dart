@@ -5,6 +5,7 @@ import 'package:curs_flutter/src/containers/user_container.dart';
 import 'package:curs_flutter/src/models/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/src/store.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,10 +15,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ScrollController _controller = ScrollController();
+
   @override
   void initState() {
     super.initState();
     StoreProvider.of<AppState>(context, listen: false).dispatch(GetMovies(_onResult));
+    _controller.addListener(_onScroll);
   }
 
   void _onResult(AppAction action) {
@@ -27,6 +31,21 @@ class _HomePageState extends State<HomePage> {
       final Object error = action.error;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('An error happened $error')));
     }
+  }
+
+  void _onScroll() {
+    final double extent = _controller.position.maxScrollExtent;
+    final double offset = _controller.offset;
+    final Store<AppState> store = StoreProvider.of<AppState>(context);
+    if(offset >= extent - MediaQuery.of(context).size.height && !store.state.isLoading){
+      store.dispatch(GetMovies(_onResult));
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -42,14 +61,6 @@ class _HomePageState extends State<HomePage> {
                 StoreProvider.of<AppState>(context).dispatch(const Logout());
               },
             ),
-            actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  StoreProvider.of<AppState>(context).dispatch(GetMovies(_onResult));
-                },
-              )
-            ],
           ),
           body: MoviesContainer(
             builder: (BuildContext context, List<Movie> movies) {
@@ -59,6 +70,7 @@ class _HomePageState extends State<HomePage> {
               return UserContainer(
                 builder: (BuildContext context, AppUser? user) {
                   return ListView.builder(
+                    controller: _controller,
                     itemCount: movies.length,
                     itemBuilder: (BuildContext context, int index) {
                       final Movie movie = movies[index];
@@ -69,7 +81,10 @@ class _HomePageState extends State<HomePage> {
                         children: <Widget>[
                           Stack(
                             children: <Widget>[
-                              Image.network(movie.poster),
+                              SizedBox(
+                                  height: 320,
+                                  child: Image.network(movie.poster),
+                              ),
                               IconButton(
                                 color: Colors.red,
                                 icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
