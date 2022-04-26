@@ -22,7 +22,8 @@ class Login with _$Login implements AppAction {
   @Implements<ActionDone>()
   @Implements<ErrorAction>()
   const factory Login.error(
-    Object error, StackTrace stackTrace, [
+    Object error,
+    StackTrace stackTrace, [
     @Default(_kLoginPendingId) String pendingId,
   ]) = LoginError;
 

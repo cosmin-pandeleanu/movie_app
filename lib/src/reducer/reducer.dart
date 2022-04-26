@@ -27,7 +27,6 @@ Reducer<AppState> _reducer = combineReducers<AppState>(<Reducer<AppState>>[
   movieReducer,
   TypedReducer<AppState, ActionStart>(_actionStart),
   TypedReducer<AppState, ActionDone>(_actionDone),
-
 ]);
 
 AppState _actionStart(AppState state, ActionStart action) {
@@ -36,5 +35,4 @@ AppState _actionStart(AppState state, ActionStart action) {
 
 AppState _actionDone(AppState state, ActionDone action) {
   return state.copyWith(pending: <String>{...state.pending}..remove(action.pendingId));
-
 }

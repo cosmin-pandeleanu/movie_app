@@ -6,7 +6,6 @@ Reducer<AppState> movieReducer = combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, GetMoviesSuccessful>(_getMoviesSuccessful),
 ]);
 
-
 AppState _getMoviesSuccessful(AppState state, GetMoviesSuccessful action) {
   return state.copyWith(
     pageNumber: state.pageNumber + 1,

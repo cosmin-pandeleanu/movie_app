@@ -19,8 +19,8 @@ class GetMovies with _$GetMovies implements AppAction {
 
   @Implements<ActionDone>()
   const factory GetMovies.successful(
-      List<Movie> movies,
-      String pendingId,
+    List<Movie> movies,
+    String pendingId,
   ) = GetMoviesSuccessful;
 
   @Implements<ActionDone>()
