@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const String _kFavoriteMoviesKey = 'user_favorite_movies';
 
-class AuthApi implements AuthApiBase{
+class AuthApi implements AuthApiBase {
   AuthApi(this._auth, this._preferences);
 
   final FirebaseAuth _auth;

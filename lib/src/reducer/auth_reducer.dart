@@ -36,5 +36,5 @@ AppState _userFavoriteError(AppState state, UpdateFavoriteError action) {
 }
 
 AppState _logoutSuccessful(AppState state, LogoutSuccessful action) {
-  return state.copyWith(user:null);
+  return state.copyWith(user: null);
 }

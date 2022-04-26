@@ -62,8 +62,8 @@ class AuthEpic {
   Stream<AppAction> _logoutStart(Stream<LogoutStart> actions, EpicStore<AppState> store) {
     return actions.flatMap((LogoutStart action) {
       return Stream<void>.value(null)
-      .asyncMap((_) => _authApi.logout())
-      .mapTo(const Logout.successful())
+          .asyncMap((_) => _authApi.logout())
+          .mapTo(const Logout.successful())
           .onErrorReturnWith(Logout.error);
     });
   }

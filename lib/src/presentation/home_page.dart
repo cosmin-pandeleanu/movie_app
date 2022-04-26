@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
             title: Center(child: Text('Movies ${state.pageNumber - 1}')),
             leading: IconButton(
               icon: const Icon(Icons.power_settings_new),
-              onPressed: (){
+              onPressed: () {
                 StoreProvider.of<AppState>(context).dispatch(const Logout());
               },
             ),
