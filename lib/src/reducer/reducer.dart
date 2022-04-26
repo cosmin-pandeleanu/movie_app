@@ -25,4 +25,16 @@ AppState reducer(AppState state, dynamic action) {
 Reducer<AppState> _reducer = combineReducers<AppState>(<Reducer<AppState>>[
   authReducer,
   movieReducer,
+  TypedReducer<AppState, ActionStart>(_actionStart),
+  TypedReducer<AppState, ActionDone>(_actionDone),
+
 ]);
+
+AppState _actionStart(AppState state, ActionStart action) {
+  return state.copyWith(pending: <String>{...state.pending, action.pendingId});
+}
+
+AppState _actionDone(AppState state, ActionDone action) {
+  return state.copyWith(pending: <String>{...state.pending}..remove(action.pendingId));
+
+}

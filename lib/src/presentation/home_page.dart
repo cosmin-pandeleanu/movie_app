@@ -1,11 +1,12 @@
 import 'package:curs_flutter/src/actions/index.dart';
 import 'package:curs_flutter/src/containers/home_page_container.dart';
 import 'package:curs_flutter/src/containers/movies_container.dart';
+import 'package:curs_flutter/src/containers/pending_container.dart';
 import 'package:curs_flutter/src/containers/user_container.dart';
 import 'package:curs_flutter/src/models/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/src/store.dart';
+import 'package:redux/redux.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    StoreProvider.of<AppState>(context, listen: false).dispatch(GetMovies(_onResult));
+    StoreProvider.of<AppState>(context, listen: false).dispatch(GetMovies.start(_onResult));
     _controller.addListener(_onScroll);
   }
 
@@ -37,8 +38,9 @@ class _HomePageState extends State<HomePage> {
     final double extent = _controller.position.maxScrollExtent;
     final double offset = _controller.offset;
     final Store<AppState> store = StoreProvider.of<AppState>(context);
-    if(offset >= extent - MediaQuery.of(context).size.height && !store.state.isLoading){
-      store.dispatch(GetMovies(_onResult));
+    final bool isLoading = <String>[GetMovies.pendingKey, GetMovies.pendingKeyMore].any(store.state.pending.contains);
+    if (offset >= extent - MediaQuery.of(context).size.height && !isLoading) {
+      store.dispatch(GetMovies.more(_onResult));
     }
   }
 
@@ -62,49 +64,60 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          body: MoviesContainer(
-            builder: (BuildContext context, List<Movie> movies) {
-              if (state.isLoading && movies.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return UserContainer(
-                builder: (BuildContext context, AppUser? user) {
-                  return ListView.builder(
-                    controller: _controller,
-                    itemCount: movies.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final Movie movie = movies[index];
+          body: PendingContainer(
+            builder: (BuildContext context, Set<String> pending) {
+              return MoviesContainer(
+              builder: (BuildContext context, List<Movie> movies) {
+                final bool isLoading = state.pending.contains(GetMovies.pendingKey);
+                final bool isLoadingMore = state.pending.contains(GetMovies.pendingKeyMore);
+                if (isLoading && movies.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return UserContainer(
+                  builder: (BuildContext context, AppUser? user) {
+                    return ListView.builder(
+                      controller: _controller,
+                      itemCount: movies.length + (isLoadingMore? 1:0),
+                      itemBuilder: (BuildContext context, int index) {
+                        if(index == movies.length){
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        final Movie movie = movies[index];
 
-                      final bool isFavorite = user!.favoriteMovies.contains(movie.id);
+                        final bool isFavorite = user!.favoriteMovies.contains(movie.id);
 
-                      return Column(
-                        children: <Widget>[
-                          Stack(
-                            children: <Widget>[
-                              SizedBox(
+
+
+                        return Column(
+                          children: <Widget>[
+                            Stack(
+                              children: <Widget>[
+                                SizedBox(
                                   height: 320,
                                   child: Image.network(movie.poster),
-                              ),
-                              IconButton(
-                                color: Colors.red,
-                                icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
-                                onPressed: () {
-                                  StoreProvider.of<AppState>(context)
-                                      .dispatch(UpdateFavorite(movie.id, add: !isFavorite));
-                                },
-                              )
-                            ],
-                          ),
-                          Text(movie.title),
-                          Text('${movie.year}'),
-                          Text(movie.genres.join(', ')),
-                          Text('${movie.rating}')
-                        ],
-                      );
-                    },
-                  );
-                },
-              );
+                                ),
+                                IconButton(
+                                  color: Colors.red,
+                                  icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+                                  onPressed: () {
+                                    StoreProvider.of<AppState>(context)
+                                        .dispatch(UpdateFavorite(movie.id, add: !isFavorite));
+                                  },
+                                )
+                              ],
+                            ),
+                            Text(movie.title),
+                            Text('${movie.year}'),
+                            Text(movie.genres.join(', ')),
+                            Text('${movie.rating}')
+                          ],
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            );
             },
           ),
         );

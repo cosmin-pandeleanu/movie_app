@@ -23,8 +23,8 @@ class AuthEpic {
     return actions.flatMap((LoginStart action) {
       return Stream<void>.value(null)
           .asyncMap((_) => _authApi.login(email: action.email, password: action.password))
-          .map<Login>(Login.successful)
-          .onErrorReturnWith(Login.error)
+          .map<Login>($Login.successful)
+          .onErrorReturnWith($Login.error)
           .doOnData(action.onResult);
     });
   }
@@ -33,8 +33,8 @@ class AuthEpic {
     return actions.flatMap((GetCurrentUserStart action) {
       return Stream<void>.value(null)
           .asyncMap((_) => _authApi.getCurrentUser())
-          .map(GetCurrentUser.successful)
-          .onErrorReturnWith(GetCurrentUser.error);
+          .map<GetCurrentUser>($GetCurrentUser.successful)
+          .onErrorReturnWith($GetCurrentUser.error);
     });
   }
 
@@ -42,8 +42,8 @@ class AuthEpic {
     return actions.flatMap((CreateUserStart action) {
       return Stream<void>.value(null)
           .asyncMap((_) => _authApi.create(email: action.email, password: action.password, username: action.username))
-          .map(CreateUser.successful)
-          .onErrorReturnWith(CreateUser.error)
+          .map<CreateUser>($CreateUser.successful)
+          .onErrorReturnWith($CreateUser.error)
           .doOnData(action.onResult);
     });
   }
@@ -64,7 +64,7 @@ class AuthEpic {
       return Stream<void>.value(null)
           .asyncMap((_) => _authApi.logout())
           .mapTo(const Logout.successful())
-          .onErrorReturnWith(Logout.error);
+          .onErrorReturnWith($Logout.error);
     });
   }
 }

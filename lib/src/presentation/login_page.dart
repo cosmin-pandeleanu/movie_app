@@ -1,4 +1,5 @@
 import 'package:curs_flutter/src/actions/index.dart';
+import 'package:curs_flutter/src/containers/pending_container.dart';
 import 'package:curs_flutter/src/models/index.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     StoreProvider.of<AppState>(context)
-        .dispatch(Login(email: _email.text, password: _password.text, onResult: _onResult));
+        .dispatch(Login.start(email: _email.text, password: _password.text, onResult: _onResult));
   }
 
   void _onResult(AppAction action) {
@@ -40,8 +41,13 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Form(
-        child: Builder(
-          builder: (BuildContext context) {
+        child: PendingContainer(
+          builder: (BuildContext context, Set<String> pending) {
+            if(pending.contains(Login.pendingKey)){
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             return SafeArea(
               child: Center(
                 child: Padding(
