@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curs_flutter/src/actions/index.dart';
 import 'package:curs_flutter/src/data/auth_api.dart';
 import 'package:curs_flutter/src/data/movie_api.dart';
 import 'package:curs_flutter/src/epics/app_epic.dart';
 import 'package:curs_flutter/src/models/index.dart';
+import 'package:curs_flutter/src/presentation/comments_page.dart';
 import 'package:curs_flutter/src/presentation/home.dart';
 import 'package:curs_flutter/src/presentation/login_page.dart';
 import 'package:curs_flutter/src/presentation/sign_up_page.dart';
@@ -14,17 +16,16 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final FirebaseApp app = await Firebase.initializeApp();
   final FirebaseAuth auth = FirebaseAuth.instanceFor(app: app);
-  final SharedPreferences preferences = await SharedPreferences.getInstance();
+  final FirebaseFirestore firestore = FirebaseFirestore.instanceFor(app: app);
 
   final Client client = Client();
-  final MovieApi movieApi = MovieApi(client);
-  final AuthApi authApi = AuthApi(auth, preferences);
+  final MovieApi movieApi = MovieApi(client, firestore);
+  final AuthApi authApi = AuthApi(auth, firestore);
   final AppEpic epic = AppEpic(movieApi, authApi);
 
   final Store<AppState> store = Store<AppState>(
@@ -52,6 +53,7 @@ class MovieApp extends StatelessWidget {
           '/': (BuildContext context) => const Home(),
           '/signUp': (BuildContext context) => const SignUpPage(),
           '/login': (BuildContext context) => const LoginPage(),
+          '/comments': (BuildContext context) => const CommentsPage(),
         },
       ),
     );

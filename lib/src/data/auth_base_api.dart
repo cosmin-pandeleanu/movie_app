@@ -9,5 +9,5 @@ abstract class AuthApiBase {
 
   Future<void> logout();
 
-  Future<void> updateFavorites(int id, {required bool add});
+  Future<void> updateFavorites(String uid, int id, {required bool add});
 }

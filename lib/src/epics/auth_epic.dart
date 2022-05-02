@@ -51,7 +51,7 @@ class AuthEpic {
   Stream<AppAction> _updateFavoriteStart(Stream<UpdateFavoriteStart> actions, EpicStore<AppState> store) {
     return actions.flatMap((UpdateFavoriteStart action) {
       return Stream<void>.value(null)
-          .asyncMap((_) => _authApi.updateFavorites(action.id, add: action.add))
+          .asyncMap((_) => _authApi.updateFavorites(store.state.user!.uid, action.id, add: action.add))
           .mapTo(const UpdateFavorite.successful())
           .onErrorReturnWith((Object error, StackTrace stackTrace) {
         return UpdateFavorite.error(error, stackTrace, action.id, add: action.add);

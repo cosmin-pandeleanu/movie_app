@@ -56,13 +56,14 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: AppBar(
-            title: Center(child: Text('Movies ${state.pageNumber - 1}')),
+            title: Center(child: Text('Movies  ${state.pageNumber - 1}')),
             leading: IconButton(
               icon: const Icon(Icons.power_settings_new),
               onPressed: () {
                 StoreProvider.of<AppState>(context).dispatch(const Logout());
               },
             ),
+            backgroundColor: Colors.blueGrey,
           ),
           body: PendingContainer(
             builder: (BuildContext context, Set<String> pending) {
@@ -86,29 +87,35 @@ class _HomePageState extends State<HomePage> {
 
                           final bool isFavorite = user!.favoriteMovies.contains(movie.id);
 
-                          return Column(
-                            children: <Widget>[
-                              Stack(
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: 320,
-                                    child: Image.network(movie.poster),
-                                  ),
-                                  IconButton(
-                                    color: Colors.red,
-                                    icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
-                                    onPressed: () {
-                                      StoreProvider.of<AppState>(context)
-                                          .dispatch(UpdateFavorite(movie.id, add: !isFavorite));
-                                    },
-                                  )
-                                ],
-                              ),
-                              Text(movie.title),
-                              Text('${movie.year}'),
-                              Text(movie.genres.join(', ')),
-                              Text('${movie.rating}')
-                            ],
+                          return GestureDetector(
+                            onTap: () {
+                              StoreProvider.of<AppState>(context).dispatch(SetSelectedMovieId(movie.id));
+                              Navigator.pushNamed(context, '/comments');
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Stack(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 320,
+                                      child: Image.network(movie.poster),
+                                    ),
+                                    IconButton(
+                                      color: Colors.red,
+                                      icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+                                      onPressed: () {
+                                        StoreProvider.of<AppState>(context)
+                                            .dispatch(UpdateFavorite(movie.id, add: !isFavorite));
+                                      },
+                                    )
+                                  ],
+                                ),
+                                Text(movie.title),
+                                Text('${movie.year}'),
+                                Text(movie.genres.join(', ')),
+                                Text('${movie.rating}')
+                              ],
+                            ),
                           );
                         },
                       );

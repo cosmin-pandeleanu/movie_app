@@ -1,12 +1,15 @@
 import 'package:curs_flutter/src/models/index.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'create_comment.dart';
 part 'create_user.dart';
+part 'listen_for_comments.dart';
 part 'get_current_user.dart';
 part 'get_movies.dart';
 part 'index.freezed.dart';
 part 'login.dart';
 part 'logout.dart';
+part 'set.dart';
 part 'update_favorites.dart';
 
 abstract class AppAction {}

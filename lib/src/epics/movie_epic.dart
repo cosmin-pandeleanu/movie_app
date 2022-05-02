@@ -10,7 +10,11 @@ class MovieEpic {
   final MovieApi _api;
 
   Epic<AppState> getEpics() {
-    return combineEpics(<Epic<AppState>>[_getMovies]);
+    return combineEpics(<Epic<AppState>>[
+      _getMovies,
+      _getComments,
+      TypedEpic<AppState, CreateCommentStart>(_createCommentStart),
+    ]);
   }
 
   Stream<AppAction> _getMovies(Stream<dynamic> actions, EpicStore<AppState> store) {
@@ -34,6 +38,31 @@ class MovieEpic {
       }).onErrorReturnWith((Object error, StackTrace stackTrace) {
         return GetMovies.error(error, stackTrace, pendingId);
       }).doOnData(onResult);
+    });
+  }
+
+  Stream<AppAction> _getComments(Stream<dynamic> actions, EpicStore<AppState> store) {
+    return actions.whereType<ListenForCommentsStart>().flatMap((ListenForCommentsStart action) {
+      return _api.listenForComments(action.movieId).map<ListenForComments>($ListenForComments.event).takeUntil<dynamic>(
+        actions.where((dynamic event) {
+          return event is ListenForCommentsDone && event.movieId == action.movieId;
+        }),
+      ).onErrorReturnWith($ListenForComments.error);
+    });
+  }
+
+  Stream<AppAction> _createCommentStart(Stream<CreateCommentStart> actions, EpicStore<AppState> store) {
+    return actions.flatMap((CreateCommentStart action) {
+      return Stream<void>.value(null)
+          .asyncMap((_) {
+            return _api.createComment(
+              uid: store.state.user!.uid,
+              movieId: store.state.selectedMovieId!,
+              text: action.text,
+            );
+          })
+          .mapTo(const CreateComment.successful())
+          .onErrorReturnWith($CreateComment.error);
     });
   }
 }
