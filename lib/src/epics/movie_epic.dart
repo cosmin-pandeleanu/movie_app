@@ -12,7 +12,7 @@ class MovieEpic {
   Epic<AppState> getEpics() {
     return combineEpics(<Epic<AppState>>[
       _getMovies,
-      _getComments,
+      _listenForComments,
       TypedEpic<AppState, CreateCommentStart>(_createCommentStart),
     ]);
   }
@@ -41,13 +41,22 @@ class MovieEpic {
     });
   }
 
-  Stream<AppAction> _getComments(Stream<dynamic> actions, EpicStore<AppState> store) {
+  Stream<AppAction> _listenForComments(Stream<dynamic> actions, EpicStore<AppState> store) {
     return actions.whereType<ListenForCommentsStart>().flatMap((ListenForCommentsStart action) {
-      return _api.listenForComments(action.movieId).map<ListenForComments>($ListenForComments.event).takeUntil<dynamic>(
-        actions.where((dynamic event) {
-          return event is ListenForCommentsDone && event.movieId == action.movieId;
-        }),
-      ).onErrorReturnWith($ListenForComments.error);
+      return _api
+          .listenForComments(action.movieId)
+          .expand((List<Comment> comments) {
+            return <AppAction>[
+              ListenForComments.event(comments),
+              ...comments
+                  .where((Comment comment) => store.state.users[comment.uid] == null)
+                  .map((Comment comment) => GetUser(comment.uid)),
+            ];
+          })
+          .takeUntil<dynamic>(
+            actions.where((dynamic event) => event is ListenForCommentsDone && event.movieId == action.movieId),
+          )
+          .onErrorReturnWith($ListenForComments.error);
     });
   }
 

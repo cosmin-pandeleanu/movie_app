@@ -71,9 +71,11 @@ class _HomePageState extends State<HomePage> {
                 builder: (BuildContext context, List<Movie> movies) {
                   final bool isLoading = state.pending.contains(GetMovies.pendingKey);
                   final bool isLoadingMore = state.pending.contains(GetMovies.pendingKeyMore);
+                  const bool colorType = false;
                   if (isLoading && movies.isEmpty) {
                     return const Center(child: CircularProgressIndicator());
                   }
+
                   return UserContainer(
                     builder: (BuildContext context, AppUser? user) {
                       return ListView.builder(
@@ -92,29 +94,46 @@ class _HomePageState extends State<HomePage> {
                               StoreProvider.of<AppState>(context).dispatch(SetSelectedMovieId(movie.id));
                               Navigator.pushNamed(context, '/comments');
                             },
-                            child: Column(
-                              children: <Widget>[
-                                Stack(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      height: 320,
-                                      child: Image.network(movie.poster),
-                                    ),
-                                    IconButton(
-                                      color: Colors.red,
-                                      icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
-                                      onPressed: () {
-                                        StoreProvider.of<AppState>(context)
-                                            .dispatch(UpdateFavorite(movie.id, add: !isFavorite));
-                                      },
-                                    )
-                                  ],
-                                ),
-                                Text(movie.title),
-                                Text('${movie.year}'),
-                                Text(movie.genres.join(', ')),
-                                Text('${movie.rating}')
-                              ],
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white38,
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: Column(
+                                children: <Widget>[
+                                  Stack(
+                                    children: <Widget>[
+                                      SizedBox(
+                                        height: 320,
+                                        child: Image.network(movie.poster),
+                                      ),
+                                      IconButton(
+                                        color: Colors.red,
+                                        icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+                                        onPressed: () {
+                                          StoreProvider.of<AppState>(context)
+                                              .dispatch(UpdateFavorite(movie.id, add: !isFavorite));
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                  Text(
+                                    movie.title,
+                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text('${movie.year}'),
+                                  Text(movie.genres.join(', ')),
+                                  Row(
+                                    children: <Widget>[
+                                      Text('${movie.rating}'),
+                                      const Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         },

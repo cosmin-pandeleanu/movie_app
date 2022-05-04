@@ -1,6 +1,7 @@
 import 'package:curs_flutter/src/actions/index.dart';
 import 'package:curs_flutter/src/containers/comments_container.dart';
 import 'package:curs_flutter/src/containers/selected_movie_container.dart';
+import 'package:curs_flutter/src/containers/users_container.dart';
 import 'package:curs_flutter/src/models/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -15,6 +16,7 @@ class CommentsPage extends StatefulWidget {
 
 class _CommentsPageState extends State<CommentsPage> {
   late Store<AppState> _store;
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -40,20 +42,51 @@ class _CommentsPageState extends State<CommentsPage> {
             title: Center(child: Text(movie.title)),
             backgroundColor: Colors.blueGrey,
           ),
-          body: CommentsContainer(
-            builder: (BuildContext context, List<Comment> comments) {
-              if (comments.isEmpty) {
-                return const Center(
-                  child: Text('No comments.'),
-                );
-              }
+          body: UsersContainer(
+            builder: (BuildContext context, Map<String, AppUser> users) {
+              return CommentsContainer(
+                builder: (BuildContext context, List<Comment> comments) {
+                  return SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        if (comments.isNotEmpty)
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: comments.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final Comment comment = comments[index];
+                                final AppUser user = users[comment.uid]!;
 
-              return ListView.builder(
-                itemCount: comments.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final Comment comment = comments[index];
-                  return ListTile(
-                    title: Text(comment.text),
+                                return ListTile(
+                                  title: Text(comment.text),
+                                  subtitle: Text(<Object>[user.username, comment.createdAt].join('\n')),
+                                );
+                              },
+                            ),
+                          )
+                        else
+                          const Center(
+                            child: Text('No comments.'),
+                          ),
+                        TextField(
+                          controller: _controller,
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                            suffix: IconButton(
+                              icon: const Icon(Icons.send),
+                              onPressed: () {
+                                if (_controller.text.isEmpty) {
+                                  return;
+                                }
+                                StoreProvider.of<AppState>(context).dispatch(CreateCommentStart(_controller.text));
+                                _controller.clear();
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 },
               );

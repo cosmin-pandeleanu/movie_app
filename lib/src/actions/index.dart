@@ -6,6 +6,7 @@ part 'create_user.dart';
 part 'listen_for_comments.dart';
 part 'get_current_user.dart';
 part 'get_movies.dart';
+part 'get_user.dart';
 part 'index.freezed.dart';
 part 'login.dart';
 part 'logout.dart';

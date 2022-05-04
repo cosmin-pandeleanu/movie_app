@@ -75,4 +75,10 @@ class AuthApi implements AuthApiBase {
       transaction.set(_firestore.doc('users/$uid'), user.toJson());
     });
   }
+
+  @override
+  Future<AppUser> getUser(String uid) async {
+    final DocumentSnapshot<Map<String, dynamic>> snapshot = await _firestore.doc('users/$uid').get();
+    return AppUser.fromJson(snapshot.data()!);
+  }
 }
