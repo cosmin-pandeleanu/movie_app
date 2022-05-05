@@ -6,6 +6,32 @@ part of 'index.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$AppState$ _$$AppState$FromJson(Map<String, dynamic> json) => _$AppState$(
+      movies: (json['movies'] as List<dynamic>?)?.map((e) => Movie.fromJson(e as Map<String, dynamic>)).toList() ??
+          const <Movie>[],
+      pageNumber: json['pageNumber'] as int? ?? 1,
+      user: json['user'] == null ? null : AppUser.fromJson(json['user'] as Map<String, dynamic>),
+      pending: (json['pending'] as List<dynamic>?)?.map((e) => e as String).toSet() ?? const <String>{},
+      comments:
+          (json['comments'] as List<dynamic>?)?.map((e) => Comment.fromJson(e as Map<String, dynamic>)).toList() ??
+              const <Comment>[],
+      selectedMovieId: json['selectedMovieId'] as int?,
+      users: (json['users'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, AppUser.fromJson(e as Map<String, dynamic>)),
+          ) ??
+          const <String, AppUser>{},
+    );
+
+Map<String, dynamic> _$$AppState$ToJson(_$AppState$ instance) => <String, dynamic>{
+      'movies': instance.movies,
+      'pageNumber': instance.pageNumber,
+      'user': instance.user,
+      'pending': instance.pending.toList(),
+      'comments': instance.comments,
+      'selectedMovieId': instance.selectedMovieId,
+      'users': instance.users,
+    };
+
 _$AppUser$ _$$AppUser$FromJson(Map<String, dynamic> json) => _$AppUser$(
       uid: json['uid'] as String,
       email: json['email'] as String,

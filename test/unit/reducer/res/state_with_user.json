@@ -1,0 +1,18 @@
+{
+  "movies": [],
+  "pageNumber": 1,
+  "user": {
+    "uid": "uid",
+    "email": "email",
+    "username": "username",
+    "favoriteMovies": [
+      1,
+      2,
+      3
+    ]
+  },
+  "pending": [],
+  "comments": [],
+  "selectedMovieId": null,
+  "users": {}
+}

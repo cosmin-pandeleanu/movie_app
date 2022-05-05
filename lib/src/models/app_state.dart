@@ -11,4 +11,6 @@ class AppState with _$AppState {
     int? selectedMovieId,
     @Default(<String, AppUser>{}) Map<String /*uid*/, AppUser> users,
   }) = AppState$;
+
+  factory AppState.fromJson(Map<dynamic, dynamic> json) => _$AppStateFromJson(Map<String, dynamic>.from(json));
 }

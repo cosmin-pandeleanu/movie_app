@@ -50,7 +50,8 @@ class MovieEpic {
               ListenForComments.event(comments),
               ...comments
                   .where((Comment comment) => store.state.users[comment.uid] == null)
-                  .map((Comment comment) => GetUser(comment.uid)),
+                  .map((Comment comment) => GetUser(comment.uid))
+                  .toSet(),
             ];
           })
           .takeUntil<dynamic>(
