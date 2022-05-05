@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (BuildContext context, List<Movie> movies) {
                   final bool isLoading = state.pending.contains(GetMovies.pendingKey);
                   final bool isLoadingMore = state.pending.contains(GetMovies.pendingKeyMore);
-                  const bool colorType = false;
+                  //const bool colorType = false;
                   if (isLoading && movies.isEmpty) {
                     return const Center(child: CircularProgressIndicator());
                   }

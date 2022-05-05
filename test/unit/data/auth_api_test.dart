@@ -6,8 +6,10 @@ import 'package:curs_flutter/src/models/index.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:path/path.dart' as path;
 
 
+// ignore_for_file: subtype_of_sealed_class, avoid_implementing_value_types
 class MockFirebaseAuth with Mock implements FirebaseAuth {}
 
 class MockFirebaseFirestore with Mock implements FirebaseFirestore {}
@@ -18,7 +20,8 @@ class MockDocumentSnapshot with Mock implements DocumentSnapshot<Map<String, dyn
 
 Future<void> main()async{
   final Map<String, dynamic> userData =
-    jsonDecode(File(r'.\test\unit\reducer\res\user.json').readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(File(path.join('.', 'test', 'unit', 'data', 'res', 'user.json')).readAsStringSync())
+      as Map<String, dynamic>;
   late FirebaseAuth auth;
   late MockFirebaseFirestore firestore;
   late MockDocumentReference ref;
