@@ -25,6 +25,7 @@ class _$AppStateTearOff {
   AppState$ call(
       {List<Movie> movies = const <Movie>[],
       int pageNumber = 1,
+      String genre = '',
       AppUser? user,
       Set<String> pending = const <String>{},
       List<Comment> comments = const <Comment>[],
@@ -33,6 +34,7 @@ class _$AppStateTearOff {
     return AppState$(
       movies: movies,
       pageNumber: pageNumber,
+      genre: genre,
       user: user,
       pending: pending,
       comments: comments,
@@ -53,6 +55,7 @@ const $AppState = _$AppStateTearOff();
 mixin _$AppState {
   List<Movie> get movies => throw _privateConstructorUsedError;
   int get pageNumber => throw _privateConstructorUsedError;
+  String get genre => throw _privateConstructorUsedError;
   AppUser? get user => throw _privateConstructorUsedError;
   Set<String> get pending => throw _privateConstructorUsedError;
   List<Comment> get comments => throw _privateConstructorUsedError;
@@ -70,6 +73,7 @@ abstract class $AppStateCopyWith<$Res> {
   $Res call(
       {List<Movie> movies,
       int pageNumber,
+      String genre,
       AppUser? user,
       Set<String> pending,
       List<Comment> comments,
@@ -91,6 +95,7 @@ class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
   $Res call({
     Object? movies = freezed,
     Object? pageNumber = freezed,
+    Object? genre = freezed,
     Object? user = freezed,
     Object? pending = freezed,
     Object? comments = freezed,
@@ -106,6 +111,10 @@ class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
           ? _value.pageNumber
           : pageNumber // ignore: cast_nullable_to_non_nullable
               as int,
+      genre: genre == freezed
+          ? _value.genre
+          : genre // ignore: cast_nullable_to_non_nullable
+              as String,
       user: user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
@@ -148,6 +157,7 @@ abstract class $AppState$CopyWith<$Res> implements $AppStateCopyWith<$Res> {
   $Res call(
       {List<Movie> movies,
       int pageNumber,
+      String genre,
       AppUser? user,
       Set<String> pending,
       List<Comment> comments,
@@ -170,6 +180,7 @@ class _$AppState$CopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res> impleme
   $Res call({
     Object? movies = freezed,
     Object? pageNumber = freezed,
+    Object? genre = freezed,
     Object? user = freezed,
     Object? pending = freezed,
     Object? comments = freezed,
@@ -185,6 +196,10 @@ class _$AppState$CopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res> impleme
           ? _value.pageNumber
           : pageNumber // ignore: cast_nullable_to_non_nullable
               as int,
+      genre: genre == freezed
+          ? _value.genre
+          : genre // ignore: cast_nullable_to_non_nullable
+              as String,
       user: user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
@@ -215,6 +230,7 @@ class _$AppState$ implements AppState$ {
   const _$AppState$(
       {this.movies = const <Movie>[],
       this.pageNumber = 1,
+      this.genre = '',
       this.user,
       this.pending = const <String>{},
       this.comments = const <Comment>[],
@@ -229,6 +245,9 @@ class _$AppState$ implements AppState$ {
   @JsonKey()
   @override
   final int pageNumber;
+  @JsonKey()
+  @override
+  final String genre;
   @override
   final AppUser? user;
   @JsonKey()
@@ -245,7 +264,7 @@ class _$AppState$ implements AppState$ {
 
   @override
   String toString() {
-    return 'AppState(movies: $movies, pageNumber: $pageNumber, user: $user, pending: $pending, comments: $comments, selectedMovieId: $selectedMovieId, users: $users)';
+    return 'AppState(movies: $movies, pageNumber: $pageNumber, genre: $genre, user: $user, pending: $pending, comments: $comments, selectedMovieId: $selectedMovieId, users: $users)';
   }
 
   @override
@@ -255,6 +274,7 @@ class _$AppState$ implements AppState$ {
             other is AppState$ &&
             const DeepCollectionEquality().equals(other.movies, movies) &&
             const DeepCollectionEquality().equals(other.pageNumber, pageNumber) &&
+            const DeepCollectionEquality().equals(other.genre, genre) &&
             const DeepCollectionEquality().equals(other.user, user) &&
             const DeepCollectionEquality().equals(other.pending, pending) &&
             const DeepCollectionEquality().equals(other.comments, comments) &&
@@ -267,6 +287,7 @@ class _$AppState$ implements AppState$ {
       runtimeType,
       const DeepCollectionEquality().hash(movies),
       const DeepCollectionEquality().hash(pageNumber),
+      const DeepCollectionEquality().hash(genre),
       const DeepCollectionEquality().hash(user),
       const DeepCollectionEquality().hash(pending),
       const DeepCollectionEquality().hash(comments),
@@ -287,6 +308,7 @@ abstract class AppState$ implements AppState {
   const factory AppState$(
       {List<Movie> movies,
       int pageNumber,
+      String genre,
       AppUser? user,
       Set<String> pending,
       List<Comment> comments,
@@ -299,6 +321,8 @@ abstract class AppState$ implements AppState {
   List<Movie> get movies;
   @override
   int get pageNumber;
+  @override
+  String get genre;
   @override
   AppUser? get user;
   @override

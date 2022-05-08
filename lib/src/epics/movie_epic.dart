@@ -32,7 +32,7 @@ class MovieEpic {
       }
 
       return Stream<void>.value(null)
-          .asyncMap((_) => _api.getMovies(store.state.pageNumber))
+          .asyncMap((_) => _api.getMovies(store.state.pageNumber, store.state.genre))
           .map<GetMovies>((List<Movie> movies) {
         return GetMovies.successful(movies, pendingId);
       }).onErrorReturnWith((Object error, StackTrace stackTrace) {

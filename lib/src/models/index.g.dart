@@ -10,6 +10,7 @@ _$AppState$ _$$AppState$FromJson(Map<String, dynamic> json) => _$AppState$(
       movies: (json['movies'] as List<dynamic>?)?.map((e) => Movie.fromJson(e as Map<String, dynamic>)).toList() ??
           const <Movie>[],
       pageNumber: json['pageNumber'] as int? ?? 1,
+      genre: json['genre'] as String? ?? '',
       user: json['user'] == null ? null : AppUser.fromJson(json['user'] as Map<String, dynamic>),
       pending: (json['pending'] as List<dynamic>?)?.map((e) => e as String).toSet() ?? const <String>{},
       comments:
@@ -25,6 +26,7 @@ _$AppState$ _$$AppState$FromJson(Map<String, dynamic> json) => _$AppState$(
 Map<String, dynamic> _$$AppState$ToJson(_$AppState$ instance) => <String, dynamic>{
       'movies': instance.movies,
       'pageNumber': instance.pageNumber,
+      'genre': instance.genre,
       'user': instance.user,
       'pending': instance.pending.toList(),
       'comments': instance.comments,

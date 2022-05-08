@@ -5,6 +5,7 @@ class AppState with _$AppState {
   const factory AppState({
     @Default(<Movie>[]) List<Movie> movies,
     @Default(1) int pageNumber,
+    @Default('') String genre,
     AppUser? user,
     @Default(<String>{}) Set<String> pending,
     @Default(<Comment>[]) List<Comment> comments,

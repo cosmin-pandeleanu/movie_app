@@ -15,8 +15,11 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+enum Genres { action, drama }
+
 class _HomePageState extends State<HomePage> {
   final ScrollController _controller = ScrollController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -55,15 +58,72 @@ class _HomePageState extends State<HomePage> {
     return HomePageContainer(
       builder: (BuildContext context, AppState state) {
         return Scaffold(
+          key: _scaffoldKey,
           appBar: AppBar(
             title: Center(child: Text('Movies  ${state.pageNumber - 1}')),
             leading: IconButton(
-              icon: const Icon(Icons.power_settings_new),
-              onPressed: () {
-                StoreProvider.of<AppState>(context).dispatch(const Logout());
-              },
+              icon: const Icon(Icons.format_list_bulleted),
+              onPressed: () => _scaffoldKey.currentState!.openDrawer(),
             ),
             backgroundColor: Colors.blueGrey,
+          ),
+          drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                UserAccountsDrawerHeader(
+                  accountName: Text(
+                    '${state.user?.username}',
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  accountEmail: Text(
+                    '${state.user?.email}',
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Colors.blueGrey,
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(
+                        'https://media.istockphoto.com/photos/ro/fundal-de-culoare-gri-abstract-modern-textura-tencuielii-vene%C8%9Biene-gri-stuc-vene%C8%9Bian-pe-o-id1370256645?k=20&m=1370256645&s=612x612&w=0&h=QLB5Yn8uHdd0UJyNLTARHtRrzOG2dFUtg2Gn3aNHz_8=',
+                      ),
+                    ),
+                  ),
+                ),
+                const Divider(),
+                GestureDetector(
+                  onTap: () {
+                    StoreProvider.of<AppState>(context).dispatch(const Logout());
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(
+                          Icons.power_settings_new,
+                          color: Colors.blueGrey,
+                        ),
+                        onPressed: () {
+                          StoreProvider.of<AppState>(context).dispatch(const Logout());
+                        },
+                      ),
+                      const Text(
+                        'Sign Out',
+                        style: TextStyle(color: Colors.blueGrey),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           body: PendingContainer(
             builder: (BuildContext context, Set<String> pending) {
@@ -83,7 +143,9 @@ class _HomePageState extends State<HomePage> {
                         itemCount: movies.length + (isLoadingMore ? 1 : 0),
                         itemBuilder: (BuildContext context, int index) {
                           if (index == movies.length) {
-                            return const Center(child: CircularProgressIndicator());
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
                           }
                           final Movie movie = movies[index];
 
@@ -95,10 +157,13 @@ class _HomePageState extends State<HomePage> {
                               Navigator.pushNamed(context, '/comments');
                             },
                             child: Container(
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: Colors.white38,
+                                border: Border.all(color: Colors.blueGrey),
+                                borderRadius: BorderRadius.circular(25),
                               ),
                               padding: const EdgeInsets.all(8),
+                              margin: const EdgeInsets.fromLTRB(50, 5, 50, 5),
                               child: Column(
                                 children: <Widget>[
                                   Stack(
@@ -109,21 +174,31 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       IconButton(
                                         color: Colors.red,
-                                        icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+                                        icon: Icon(
+                                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                                        ),
                                         onPressed: () {
-                                          StoreProvider.of<AppState>(context)
-                                              .dispatch(UpdateFavorite(movie.id, add: !isFavorite));
+                                          StoreProvider.of<AppState>(context).dispatch(
+                                            UpdateFavorite(
+                                              movie.id,
+                                              add: !isFavorite,
+                                            ),
+                                          );
                                         },
                                       )
                                     ],
                                   ),
                                   Text(
                                     movie.title,
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   Text('${movie.year}'),
                                   Text(movie.genres.join(', ')),
                                   Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       Text('${movie.rating}'),
                                       const Icon(

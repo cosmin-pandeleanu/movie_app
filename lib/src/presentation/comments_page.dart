@@ -58,9 +58,18 @@ class _CommentsPageState extends State<CommentsPage> {
                                 final Comment comment = comments[index];
                                 final AppUser user = users[comment.uid]!;
 
-                                return ListTile(
-                                  title: Text(comment.text),
-                                  subtitle: Text(<Object>[user.username, comment.createdAt].join('\n')),
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white38,
+                                    border: Border.all(color: Colors.blueGrey),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  padding: const EdgeInsets.all(8),
+                                  margin: const EdgeInsets.all(8),
+                                  child: ListTile(
+                                    title: Text(comment.text),
+                                    subtitle: Text(<Object>[user.username, comment.createdAt].join('\n')),
+                                  ),
                                 );
                               },
                             ),
